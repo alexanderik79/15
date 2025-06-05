@@ -1,12 +1,23 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background: #f0f0f0;
+}
+
 .game-board {
-  display: grid;
-  grid-template-columns: repeat(4, 80px);
-  gap: 2px;
-  width: fit-content;
+  position: relative;
+  width: 328px; /* 4 * (80px + 2px gap) */
+  height: 328px;
   margin: 20px auto;
+  background: #222;
 }
 
 .tile {
+  position: absolute;
   width: 80px;
   height: 80px;
   background: #ffb93b;
@@ -16,4 +27,32 @@
   font-size: 24px;
   font-weight: bold;
   border: 1px solid #222;
+  cursor: pointer;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background: #45a049;
+}
+
+p {
+  text-align: center;
+  font-size: 18px;
+  color: #333;
 }

@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import './index.css';
 
 function App() {
   const [board, setBoard] = useState([
@@ -80,24 +82,45 @@ function App() {
     setWon(false);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const emptyPos = findEmptyTile(board);
+      if (e.key === 'ArrowUp') moveTile(emptyPos.x, emptyPos.y + 1);
+      if (e.key === 'ArrowDown') moveTile(emptyPos.x, emptyPos.y - 1);
+      if (e.key === 'ArrowLeft') moveTile(emptyPos.x + 1, emptyPos.y);
+      if (e.key === 'ArrowRight') moveTile(emptyPos.x - 1, emptyPos.y);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [board]);
+
+  const tiles = [];
+  board.forEach((row, rowIndex) =>
+    row.forEach((tile, colIndex) => {
+      if (tile !== 0) {
+        tiles.push({ value: tile, x: colIndex, y: rowIndex });
+      }
+    })
+  );
+
   return (
     <div>
-      <h1>FIFTEEN</h1>
+      <h1>15</h1>
       <p>Steps: {moves}</p>
       {won && <p style={{ color: 'green' }}>You Win!</p>}
-      <button onClick={mixBoard}>New game</button>
+      <button onClick={mixBoard}>New Game</button>
       <div className="game-board">
-        {board.map((row, rowIndex) =>
-          row.map((tile, colIndex) => (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              className="tile"
-              onClick={() => tile !== 0 && moveTile(colIndex, rowIndex)}
-            >
-              {tile === 0 ? '' : tile}
-            </div>
-          ))
-        )}
+        {tiles.map(tile => (
+          <motion.div
+            key={tile.value}
+            className="tile"
+            animate={{ x: tile.x * 82, y: tile.y * 82 }}
+            transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+            onClick={() => moveTile(tile.x, tile.y)}
+          >
+            {tile.value}
+          </motion.div>
+        ))}
       </div>
     </div>
   );
