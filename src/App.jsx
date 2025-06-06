@@ -4,13 +4,26 @@ import './index.css';
 
 function App() {
   const [board, setBoard] = useState([
-    [13, 2, 7, 4],
-    [5, 6, 3, 8],
-    [9, 15, 11, 12],
-    [1, 14, 10, 0]
+    [1, 2, 3, 4],
+    [5, 6, 7, 8],
+    [9, 10, 11, 12],
+    [13, 14, 15, 0]
   ]);
   const [moves, setMoves] = useState(0);
   const [won, setWon] = useState(false);
+  const [playerName, setPlayerName] = useState('');
+  const [showModal, setShowModal] = useState(true);
+  const [bestRecord, setBestRecord] = useState(null);
+
+  useEffect(() => {
+    const savedName = localStorage.getItem('playerName');
+    const savedRecord = localStorage.getItem('bestRecord');
+    if (savedName) {
+      setPlayerName(savedName);
+      setShowModal(false);
+    }
+    if (savedRecord) setBestRecord(Number(savedRecord));
+  }, []);
 
   const findEmptyTile = (board) => {
     for (let y = 0; y < 4; y++) {
@@ -38,10 +51,15 @@ function App() {
         newBoard[emptyPos.y][emptyPos.x],
         newBoard[y][x]
       ];
+      const newMoves = moves + 1;
       setBoard(newBoard);
-      setMoves(moves + 1);
+      setMoves(newMoves);
       if (checkWin(newBoard)) {
         setWon(true);
+        if (bestRecord === null || newMoves < bestRecord) {
+          setBestRecord(newMoves);
+          localStorage.setItem('bestRecord', newMoves);
+        }
       }
     }
   };
@@ -94,6 +112,14 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [board]);
 
+  const handleStart = () => {
+    if (playerName.trim()) {
+      localStorage.setItem('playerName', playerName);
+      setShowModal(false);
+      mixBoard();
+    }
+  };
+
   const tiles = [];
   board.forEach((row, rowIndex) =>
     row.forEach((tile, colIndex) => {
@@ -105,10 +131,30 @@ function App() {
 
   return (
     <div>
-      <h1>15</h1>
-      <p>Steps: {moves}</p>
-      {won && <p style={{ color: 'green' }}>You Win!</p>}
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Enter your name</h2>
+            <input
+              type="text"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+            />
+            <button onClick={handleStart}>Play</button>
+          </div>
+        </div>
+      )}
+
+      <div className="player-info">
+        {playerName && <p>👤 {playerName}</p>}
+        {bestRecord !== null && <p>🏆 Record: {bestRecord}</p>}
+      </div>
+
+      <h1>15 Puzzle</h1>
+      <p>Moves: {moves}</p>
+      {won && <p style={{ color: 'green' }}>🎉 You win!</p>}
       <button onClick={mixBoard}>New Game</button>
+
       <div className="game-board">
         {tiles.map(tile => (
           <motion.div
