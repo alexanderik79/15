@@ -21,6 +21,7 @@ function App() {
     if (savedName) {
       setPlayerName(savedName);
       setShowModal(false);
+      mixBoard();
     }
     if (savedRecord) setBestRecord(Number(savedRecord));
   }, []);
@@ -99,18 +100,6 @@ function App() {
     setMoves(0);
     setWon(false);
   };
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      const emptyPos = findEmptyTile(board);
-      if (e.key === 'ArrowUp') moveTile(emptyPos.x, emptyPos.y + 1);
-      if (e.key === 'ArrowDown') moveTile(emptyPos.x, emptyPos.y - 1);
-      if (e.key === 'ArrowLeft') moveTile(emptyPos.x + 1, emptyPos.y);
-      if (e.key === 'ArrowRight') moveTile(emptyPos.x - 1, emptyPos.y);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [board]);
 
   const handleStart = () => {
     if (playerName.trim()) {

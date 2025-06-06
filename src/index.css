@@ -41,7 +41,10 @@ button:hover {
   width: 328px;
   height: 328px;
   margin: 20px auto;
-  background: #222;
+  padding: 5px;
+  background: #333;
+  border-radius: 8px;
+  box-shadow: 10px 5px 5px #9a9a9a;
 }
 
 .tile {
@@ -56,6 +59,7 @@ button:hover {
   font-weight: bold;
   border: 1px solid #222;
   cursor: pointer;
+  border-radius: 8px;
 }
 
 /* 👤 Имя игрока в правом верхнем углу */
