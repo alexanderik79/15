@@ -4,10 +4,10 @@ import './index.css';
 
 function App() {
   const [board, setBoard] = useState([
-    [1, 2, 3, 4],
-    [5, 6, 7, 8],
-    [9, 10, 11, 12],
-    [13, 14, 15, 0]
+    [13, 2, 7, 4],
+    [5, 6, 3, 8],
+    [9, 15, 11, 12],
+    [1, 14, 10, 0]
   ]);
   const [moves, setMoves] = useState(0);
   const [won, setWon] = useState(false);
